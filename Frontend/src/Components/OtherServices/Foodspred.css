@@ -1,0 +1,32 @@
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+
+}
+
+.name{
+    margin: 70px;
+    font-weight: bolder;
+    font-size: 60px;
+    align-items: center;
+    text-align: center;
+} 
+.name h1{ 
+    font-family: var(--ff-heading);
+    font-weight:700; 
+    font-size: 3.5rem; 
+    line-height: 1.05; 
+    letter-spacing: -0.02em; }
+  
+
+    @media screen and (max-width: 768px) {
+        .name{
+            font-size: 25px;
+            margin: 20px;
+            margin-top: 55px;
+        }
+        
+    }
+
