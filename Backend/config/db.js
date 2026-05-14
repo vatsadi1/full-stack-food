@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-export const connectDB = async ()=>{
-    (await mongoose.connect('mongodb+srv://vatsaditya:ad1tya123@cluster0.igbpbwj.mongodb.net/foodsy-project').then(()=>console.log('Db connected'))
+export const connectDB = async () => {
+  console.log("DB ENV 👉", process.env.MONGO_URI);
 
-)
-console.log("MONGO_URI 👉", process.env.MONGO_URI);
-}
+  await mongoose.connect(process.env.MONGO_URI);
+  console.log("MongoDB connected");
+};

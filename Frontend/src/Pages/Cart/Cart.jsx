@@ -1,15 +1,46 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Cart.css'
 import { StoreContext } from '../../Context/StoreContext'
- import { useContext } from 'react'
- import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Cart() {
-  const {cartItems, food_list,removefromcart,getTotalCartAmount} = useContext(StoreContext);
+
+  const {
+    cartItems,
+    food_list,
+    removefromcart,
+    getTotalCartAmount,
+    url
+  } = useContext(StoreContext);
+
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+
+    // fake loading for smooth UI
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
+    )
+  }
+
   return (
     <div className='cart'>
+
       <div className='cart-items'>
+
         <div className='cart-items-title'>
           <p>Items</p>
           <p>Title</p>
@@ -17,59 +48,125 @@ function Cart() {
           <p>Quantity</p>
           <p>Total</p>
           <p>Remove</p>
-      </div>
-      <br />
-      <hr/>
-      {food_list.map((item,index)=>{
-        if(cartItems[item._id]>0){
-          return(
-            <div>
-              <div className='cart-items-title cart-items-item'>
-               <img src={item.image} alt=""/>
-               <p>{item.name}</p>
-               <p>${item.price}</p>
-               <p>{cartItems[item._id]}</p>
-                <p>${item.price * cartItems[item._id]}</p>
-                <p onClick={()=>removefromcart(item._id)} className='cross'>X</p>
+        </div>
 
- </div>
- <hr/>
-            </div>
-             
-          )
-        }
-})}
+        <br />
+        <hr />
+
+        {food_list.map((item, index) => {
+
+          if (cartItems[item._id] > 0) {
+
+            return (
+              <div key={index}>
+
+                <div className='cart-items-title cart-items-item'>
+
+                  <img
+                    src={url + "/images/" + item.image}
+                    alt=""
+                  />
+
+                  <p>{item.name}</p>
+
+                  <p>₹{item.price}</p>
+
+                  <p>{cartItems[item._id]}</p>
+
+                  <p>
+                    ₹{item.price * cartItems[item._id]}
+                  </p>
+
+                  <p
+                    onClick={() => removefromcart(item._id)}
+                    className='cross'
+                  >
+                    X
+                  </p>
+
+                </div>
+
+                <hr />
+
+              </div>
+            )
+          }
+
+          return null;
+        })}
+
       </div>
+
       <div className='cart-bottom'>
+
         <div className='cart-total'>
-          <h2>card Totals</h2>
+
+          <h2>Cart Totals</h2>
+
           <div className='cart-total-details'>
             <p>Subtotal</p>
-            <p>${getTotalCartAmount()}</p>
+            <p>₹{getTotalCartAmount()}</p>
           </div>
-          <hr/>
+
+          <hr />
+
           <div className='cart-total-details'>
             <p>Delivery Fee</p>
-            <p>${getTotalCartAmount()===0?0:2}</p>
-            </div>
-            <hr/>
-            <div className='cart-total-details'>
-              <b>Total</b>
-              <b>${getTotalCartAmount()===0?0:getTotalCartAmount()+2}</b>
-              </div>
-      <hr/>
-              <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
-        </div>
-        <div className='cart-promocode'>
-          <div>
-            <p>If you have a prormo code, Enter it here</p>
-            <div className='cart-promocode-input'>
-              <input type="text" placeholder='Promo code'/>
-              <button>Apply</button>
+
+            <p>
+              ₹{getTotalCartAmount() === 0 ? 0 : 2}
+            </p>
           </div>
+
+          <hr />
+
+          <div className='cart-total-details'>
+            <b>Total</b>
+
+            <b>
+              ₹{
+                getTotalCartAmount() === 0
+                  ? 0
+                  : getTotalCartAmount() + 2
+              }
+            </b>
+          </div>
+
+          <hr />
+
+          <button
+            onClick={() => navigate('/order')}
+          >
+            PROCEED TO CHECKOUT
+          </button>
+
         </div>
+
+        <div className='cart-promocode'>
+
+          <div>
+
+            <p>
+              If you have a promo code, enter it here
+            </p>
+
+            <div className='cart-promocode-input'>
+
+              <input
+                type="text"
+                placeholder='Promo code'
+              />
+
+              <button>Apply</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
-    </div>
+
     </div>
   )
 }

@@ -187,7 +187,7 @@ return (
 </div>
     <div className='add-price flex-col'>
         <p>Product Price</p>
-        <input onChange={onHandlerChange} value={Data.price} type='number' name='price' placeholder='$20'></input>
+        <input onChange={onHandlerChange} value={Data.price} type='number' name='price' placeholder='₹120'></input>
     </div>
 </div>
     <button type='submit' className='add-btn'>ADD</button>

@@ -107,10 +107,10 @@ const user = await newUser.save();
 const token = CreateToken(user._id)
 res.json({success:true,Message:"User Registered Successfully",token})
 
-    }catch{
+   }catch(error){
 console.log(error)
 res.json({success:false,Message:"Error in registering user"})
-    }
+}
 }
 
 export {loginUser,registerUser}

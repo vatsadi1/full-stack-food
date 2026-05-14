@@ -65,7 +65,7 @@
 import React from 'react';
 import './Navbar.css';
 import { assets } from '../../assets/frontend_assets/assets';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../Context/StoreContext';
 import { motion } from 'framer-motion';
 
@@ -148,6 +148,20 @@ function Navbar({ setShowLogin }) {
   const [menu, setMenu] = React.useState("Home");
   const { getTotalCartAmount,token ,setToken } = React.useContext(StoreContext);
 
+
+  // use navigate hook is use to navigate on pages
+  const navigate = useNavigate();
+  
+
+  const logout = () =>{
+    // logout k liyea token remove krna hoga 
+    localStorage.removeItem("token")
+    // token khalli kro 
+    setToken("")
+    // isse navigate hota hai page 
+    navigate("/")
+  }
+
   const navItems = [
     { name: "Home", to: "/" },
     { name: "Menu", href: "#explore-menu" },
@@ -197,9 +211,11 @@ function Navbar({ setShowLogin }) {
         : <div className='navbar-profile'>
           <img src={assets.profile_icon} alt=''/>
 <ul className='nav-profile-dropdown'>
-  <li><img src={assets.bag_icon}/><p>Orders</p></li>
+  <Link to='/myorders'>
+    <li><img src={assets.bag_icon}/><p>Orders</p></li>
+  </Link>
   <hr/>
-  <li><img src={assets.logout_icon} alt=''/><p>Logout</p></li>
+  <li onClick={()=>logout()}><img src={assets.logout_icon} alt=''/><p>Logout</p></li>
 </ul>
           </div>}
         

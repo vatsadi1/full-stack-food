@@ -1,9 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from 'express';
 import cors from 'cors';   
 import { connectDB } from './config/db.js';
 import foodRouter from './routes/foodRoute.js';
-import 'dotenv/config'
+ import CartRouter from "./routes/cartRouter.js";
 import userRouter from './routes/userRoute.js';
+import orderRouter from "./routes/orderRouter.js";
+ 
 // app config
 
 const app = express();
@@ -25,6 +29,9 @@ app.get('/', (req, res) => {
 
     app.use('/api/user',userRouter)
     
+  app.use('/api/cart',CartRouter)
+
+  app.use('/api/order',orderRouter)
 
     //api to serve images statically
     app.use('/images',express.static('uploads'))

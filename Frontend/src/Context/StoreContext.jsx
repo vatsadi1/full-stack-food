@@ -1,5 +1,5 @@
-import React from 'react'
-import { food_list } from '../assets/frontend_assets/assets'
+import React, { useEffect, useState } from 'react'
+ import axios from "axios"
 
 export const StoreContext = React.createContext(null)
 
@@ -8,17 +8,25 @@ const StoreContextProvider = (props) =>{
     const[cartItems,setCartItems]=React.useState([])
     const url ="http://localhost:4000"
     const [token ,setToken]=React.useState("");
-    const addToCart=(itemId)=>{
+    const [food_list,setFoodList] = useState([])
+
+    const addToCart=async(itemId)=>{
         if(!cartItems[itemId]){
             setCartItems((prev)=>({...prev,[itemId]:1}))
         }
         else{
             setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
         }
+        if(token){
+            await axios.post(url+"/api/cart/add",{itemId},{headers:{token}})
+        }
     }
-    const removefromcart=(itemId)=>{
+    const removefromcart= async(itemId)=>{
 
         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
+        if(token){
+            await axios.post(url+"/api/cart/remove",{itemId},{headers:{token}})
+        }
     }
 
      const getTotalCartAmount=()=>{
@@ -32,7 +40,27 @@ if(cartItems[item]>0){
         }
         return totalAmount;
      }
+const fetchFoodList = async()=>{
+    const response = await axios.get(url+"/api/food/list")
+    setFoodList(response.data.data)
+}
+     const loadcartData = async (token) =>{
+        const response = await axios.post(url+"/api/cart/get",{},{headers:{token}})
+setCartItems(response.data.cartData)
+     }
+    // isse refresh krne pr logout nhi hoga matlab token ko rakh lega  
+useEffect(()=>{
+    async function loadfood (){
+        await fetchFoodList()
     
+if(localStorage.getItem("token")){
+    setToken(localStorage.getItem("token"))
+    await loadcartData(localStorage.getItem("token"))
+}
+    }
+loadfood()
+},[])
+
     const contextValue={
 food_list,
         cartItems,
